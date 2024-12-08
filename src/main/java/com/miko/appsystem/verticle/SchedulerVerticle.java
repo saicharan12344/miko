@@ -11,7 +11,7 @@ public class SchedulerVerticle extends AbstractVerticle {
   @Override
   public void start() {
     final JDBCClient dbClient = DbUtils.buildDbClient(vertx);
-    vertx.setPeriodic(5000, id -> scheduleApps(dbClient));
+    vertx.setPeriodic(15000, id -> scheduleApps(dbClient));
   }
 
   private void scheduleApps(JDBCClient dbClient) {

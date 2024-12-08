@@ -12,5 +12,6 @@ public class AppInstallSystem {
     vertx.deployVerticle(new NotificationVerticle());
     vertx.deployVerticle(new ReSchedulerVerticle());
     vertx.deployVerticle(new ApiVerticle());
+    vertx.deployVerticle(new DatabaseStateVerticle());
   }
 }

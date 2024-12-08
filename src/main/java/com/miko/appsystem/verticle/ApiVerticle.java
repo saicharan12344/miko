@@ -6,6 +6,7 @@ import com.miko.appsystem.utils.DbUtils;
 import com.miko.appsystem.utils.ResponseUtils;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
+import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.ext.jdbc.JDBCClient;
@@ -23,7 +24,13 @@ public class ApiVerticle extends AbstractVerticle {
   public void start(Promise<Void> startPromise) throws Exception {
     final JDBCClient dbClient = DbUtils.buildDbClient(vertx);
     Router router = Router.router(vertx);
-    router.route("/").handler(BodyHandler.create());
+    router.route().handler(BodyHandler.create());
+    router.route("/").handler(routingContext -> {
+      HttpServerResponse response = routingContext.response();
+      response
+        .putHeader("content-type", "text/html")
+        .end("<h1>Hello from Miko App Installation application</h1>");
+    });
     router.route("/failed/data").handler(rc -> {
       dbClient.getConnection(ar -> {
         if (ar.succeeded()) {
@@ -43,9 +50,10 @@ public class ApiVerticle extends AbstractVerticle {
     vertx.createHttpServer().requestHandler(router).listen(8080).onComplete(http -> {
       if (http.succeeded()) {
         startPromise.complete();
-        System.out.println("HTTP server started on port 8888");
+        logger.info("HTTP server started on port 8080");
       } else {
         startPromise.fail(http.cause());
+        logger.error("Api Server failed to Startup");
       }
     });
   }
