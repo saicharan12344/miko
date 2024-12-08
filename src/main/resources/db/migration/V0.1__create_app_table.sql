@@ -1,9 +1,8 @@
 CREATE TABLE app
 (
     id SERIAL PRIMARY KEY,
-    title VARCHAR,
-    errormessage VARCHAR,
+    name VARCHAR,
     state VARCHAR,
-    retries int,
-    last_updated timestamp
+    errormessage VARCHAR,
+    retries int
 );
